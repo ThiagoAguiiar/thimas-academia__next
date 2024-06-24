@@ -44,7 +44,7 @@ export function SlideOver({ id, children, width = 380 }: SlideOverProps) {
           <CloseButton onClick={handleClose} />
         </div>
 
-        <div className="mt-5">{children}</div>
+        <div className="mt-3">{children}</div>
       </div>
     </div>
   );

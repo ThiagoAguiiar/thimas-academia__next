@@ -15,7 +15,7 @@ import {
   FormMessage,
 } from "../ui/form";
 import { useForm } from "react-hook-form";
-import { IPostuser } from "@/types/user";
+import { IPostUser } from "@/types/user";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -23,46 +23,94 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { validateAddTeacherSchema } from "@/validations/adminValidation";
 import { File } from "../forms/file";
 import { Avatar } from "../forms/avatar";
+import { useToast } from "@/components/ui/use-toast";
+import { cn } from "@/lib/utils";
 
 interface IProps {
   loading?: boolean;
+  children?: React.ReactNode;
 }
 
-export function AddTeacher({ loading }: IProps) {
+export function AddTeacher({ loading, children }: IProps) {
   const { setSlideOver, slideOvers } = useSlideOverContext();
-  const [file, setFile] = React.useState<string | null>("");
+  const [file, setFile] = React.useState<string | null>(null);
+  const [internalLoading, setInternalLoading] = React.useState(false);
 
-  const form = useForm<IPostuser>({
+  const { toast } = useToast();
+
+  const form = useForm<IPostUser>({
     resolver: zodResolver(validateAddTeacherSchema),
     defaultValues: {
       name: "",
       email: "",
       image: "",
-      isAdmin: "admin",
+      isAdmin: true,
       isActive: true,
       isProvider: false,
     },
   });
 
-  const handleSubmit = async (value: IPostuser) => {
-    console.log(value);
+  const handleSubmit = async (value: IPostUser) => {
+    try {
+      setInternalLoading(true);
+
+      const response = await fetch(`${location.origin}/api/user`, {
+        method: "POST",
+        body: JSON.stringify({ ...value, image: file }),
+      });
+
+      if (response.statusText === "Created") {
+        setSlideOver("view-teacher", false);
+      }
+
+      const json = await response.json();
+
+      toast({
+        title: response.status === 200 ? "Sucesso" : "Atenção",
+        description: json.message,
+        duration: 2500,
+        className: cn(
+          "top-0 right-0 flex fixed md:max-w-[420px] md:top-4 md:right-4"
+        ),
+      });
+    } catch (err) {
+      toast({
+        title: "Erro",
+        description: "Ocorreu um erro ao cadastrar usuário",
+        duration: 2500,
+        className: cn(
+          "top-0 right-0 flex fixed md:max-w-[420px] md:top-4 md:right-4"
+        ),
+      });
+    } finally {
+      setInternalLoading(false);
+    }
   };
 
   return (
     <React.Fragment>
-      <Button
-        type="button"
-        className="text-[13px] gap-x-2"
-        size="sm"
-        variant="outline"
-        disabled={loading}
-        onClick={() => setSlideOver("add-teacher", !slideOvers["add-teacher"])}
-      >
-        <Plus size={20} />
-        Novo Professor
-      </Button>
+      {children ? (
+        React.cloneElement(children, {
+          onClick: () =>
+            setSlideOver("view-teacher", !slideOvers["view-teacher"]),
+        })
+      ) : (
+        <Button
+          type="button"
+          className="text-[13px] gap-x-2"
+          size="sm"
+          variant="outline"
+          disabled={loading}
+          onClick={() =>
+            setSlideOver("view-teacher", !slideOvers["view-teacher"])
+          }
+        >
+          <Plus size={20} />
+          Novo Professor
+        </Button>
+      )}
 
-      <SlideOver id="add-teacher" width={500}>
+      <SlideOver id="view-teacher" width={500}>
         <div className="space-y-5">
           <Title
             title="Novo Professor"
@@ -83,7 +131,7 @@ export function AddTeacher({ loading }: IProps) {
                       <FormItem>
                         <Label>Nome</Label>
                         <FormControl>
-                          <Input {...field} />
+                          <Input {...field} autoComplete="off" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -99,7 +147,7 @@ export function AddTeacher({ loading }: IProps) {
                       <FormItem>
                         <Label>Email</Label>
                         <FormControl>
-                          <Input {...field} />
+                          <Input {...field} autoComplete="off" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -115,7 +163,11 @@ export function AddTeacher({ loading }: IProps) {
                       <FormItem>
                         <Label>Senha</Label>
                         <FormControl>
-                          <Input {...field} type="password" />
+                          <Input
+                            {...field}
+                            autoComplete="off"
+                            type="password"
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -131,7 +183,7 @@ export function AddTeacher({ loading }: IProps) {
                 </FormItem>
 
                 <FormField
-                  name="isAdmin"
+                  name="isActive"
                   control={form.control}
                   render={({ field }) => {
                     return (
@@ -141,16 +193,18 @@ export function AddTeacher({ loading }: IProps) {
                             {...field}
                             onCheckedChange={(e) => {
                               e
-                                ? form.setValue("isAdmin", "admin")
-                                : form.setValue("isAdmin", "colaborador");
+                                ? form.setValue("isActive", true)
+                                : form.setValue("isActive", false);
                             }}
+                            value={field.value.toString()}
+                            checked={field.value}
                           />
                         </FormControl>
 
                         <Label>
-                          {field.value === "admin"
-                            ? "Administrador"
-                            : "Colaborador"}
+                          {field.value.toString() == "true"
+                            ? "Ativo"
+                            : "Inativo"}
                         </Label>
                       </FormItem>
                     );
@@ -161,8 +215,9 @@ export function AddTeacher({ loading }: IProps) {
               <div className="mt-5 flex justify-end">
                 <Button
                   size="sm"
-                  className="bg-[#ff1e00] hover:bg-[#ff1e00]"
-                  loading={loading}
+                  className="bg-[#ff1e00] hover:bg-[#ff1e00] gap-x-2"
+                  loading={internalLoading}
+                  disabled={internalLoading}
                 >
                   Cadastrar
                 </Button>

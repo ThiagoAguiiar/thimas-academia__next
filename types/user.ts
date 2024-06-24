@@ -1,11 +1,11 @@
-export interface IPostuser {
+export interface IPostUser {
   name: string;
   email: string;
   password: string;
   image: string | null;
   isProvider: boolean;
   isActive: boolean;
-  isAdmin: string;
+  isAdmin: boolean;
 }
 
 export interface IGetUser {

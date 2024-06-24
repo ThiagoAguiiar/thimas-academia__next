@@ -1,5 +1,5 @@
 import { supabaseComponent } from "@/lib/supabase";
-import { IGetUser } from "@/types/user";
+import { IGetUser, IPostUser } from "@/types/user";
 import { PostgrestError } from "@supabase/supabase-js";
 
 export async function getUsers(
@@ -15,7 +15,7 @@ export async function getUsers(
     const response = await supabaseComponent
       .from("user")
       .select("*")
-      .eq("name", name)
+      .ilike("name", `%${name}%`)
       .eq("isActive", isActive);
 
     return {
@@ -30,6 +30,29 @@ export async function getUsers(
     .select("*")
     .eq("isAdmin", isAdmin)
     .eq("isActive", isActive);
+
+  return {
+    data: response.data,
+    error: response.error,
+    status: response.status,
+  };
+}
+
+export async function createUser(user: IPostUser) {
+  const response = await supabaseComponent.from("user").insert([user]);
+
+  return {
+    data: response.data,
+    error: response.error,
+    status: response.status,
+  };
+}
+
+export async function getUserByEmail(email: string) {
+  const response = await supabaseComponent
+    .from("user")
+    .select("*")
+    .eq("email", email);
 
   return {
     data: response.data,

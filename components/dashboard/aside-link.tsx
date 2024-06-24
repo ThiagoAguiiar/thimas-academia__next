@@ -24,7 +24,7 @@ export function AsideLink(props: IProps) {
     <div>
       {props.noLink ? (
         <span
-          className="flex items-center gap-2 py-1.5 px-3 rounded-md transition-all hover:bg-[#f1f1f1] cursor-pointer"
+          className="flex items-center gap-2 py-1.5 px-3 rounded-md transition-all hover:bg-[#f8fafc] cursor-pointer"
           onClick={() => props.onClick}
         >
           {props.icon && props.icon}
@@ -33,7 +33,7 @@ export function AsideLink(props: IProps) {
       ) : (
         <Link
           href={props.href}
-          className="flex items-center gap-2 py-1.5 px-3 rounded-md transition-all hover:bg-[#f1f1f1]"
+          className="flex items-center gap-2 py-1.5 px-3 rounded-md transition-all hover:bg-[#f8fafc]"
         >
           {props.icon && props.icon}
           <span className="text-[14px]">{props.label}</span>

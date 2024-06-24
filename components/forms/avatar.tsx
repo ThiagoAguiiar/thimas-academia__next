@@ -11,19 +11,21 @@ interface IProps {
 }
 
 export function Avatar({ src, alt, setFile }: IProps) {
+  const internalSrc = src ? src : "/image-not-found.png";
+
   return (
     <div>
       <Image
-        src={src ? src : "/image-not-found.png"}
+        src={internalSrc}
         alt={alt}
         width={150}
         height={150}
         className="obje-cover rounded-lg"
       />
 
-      {src !== null && (
+      {src !== null && internalSrc !== "/image-not-found.png" && (
         <div onClick={() => setFile(null)} className="mt-2">
-          <Button variant="outline" className="text-red-500" size="sm">
+          <Button variant="outline" className="text-red-500 gap-x-2" size="sm">
             <Trash size={20} />
             Remover imagem
           </Button>

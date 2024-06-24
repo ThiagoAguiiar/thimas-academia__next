@@ -3,8 +3,10 @@ import "./globals.css";
 
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import NextTopLoader from "nextjs-toploader";
 import { SlideOverProvider } from "@/contexts/slideOverContext";
+import { Toaster } from "@/components/ui/toaster";
+
+import NextTopLoader from "nextjs-toploader";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,6 +22,7 @@ export default function RootLayout({ children }: Readonly<IChildren>) {
         <SlideOverProvider>
           <NextTopLoader />
           {children}
+          <Toaster />
         </SlideOverProvider>
       </body>
     </html>

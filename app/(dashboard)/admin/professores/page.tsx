@@ -1,14 +1,13 @@
 "use client";
 
-import React, { Suspense } from "react";
+import React from "react";
 
 import { Filter } from "@/components/admin/filter";
 import { Title } from "@/components/admin/title";
 
 import { IGetUser } from "@/types/user";
-import { DataTable } from "@/components/admin/data-table";
+import { UserDataTable } from "@/components/admin/user-data-table";
 import { AddTeacher } from "@/components/admin/add-teacher";
-import { Loading } from "@/components/dashboard/loading";
 
 const dataColumns = [
   {
@@ -41,7 +40,7 @@ export default function Page() {
         setLoading(true);
 
         const url = `${location.origin}/api/user?name=${name}&isActive=${isActive}&isAdmin=admin`;
-        const response = await fetch(url);
+        const response = await fetch(url, { next: { tags: ["get-teacher"] } });
         const json = await response.json();
 
         const aux: IGetUser[] = [];
@@ -67,18 +66,18 @@ export default function Page() {
   return (
     <div>
       <Title title="Professores" subtitle="Lista de professores da academia" />
-
       <Filter setName={setName} setIsActive={setIsActive} loading={loading} />
 
-      <div className="px-5 mb-4 flex items-center gap-x-3">
+      <div className="px-5 mb-4">
         <AddTeacher loading={loading} />
       </div>
 
-      <DataTable
+      <UserDataTable
         data={data}
         loading={loading}
         columns={dataColumns}
         caption={`${data?.length} Resultado(s) encontrado(s)`}
+        actions
       />
     </div>
   );
