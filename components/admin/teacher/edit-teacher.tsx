@@ -1,24 +1,32 @@
-import { SlideOver } from "@/components/dashboard/slide-over";
+"use client";
+
+import React from "react";
+
+import { ArrowSquareIn } from "@phosphor-icons/react/dist/ssr";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { useSlideOverContext } from "@/contexts/slideOverContext";
 import { IGetUser, IPostUser } from "@/types/user";
-import { ArrowSquareIn } from "@phosphor-icons/react/dist/ssr";
-import React from "react";
+import { cn } from "@/lib/utils";
+
+import { SlideOver } from "@/components/dashboard/slide-over";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Title } from "../title";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
 import {
   FormField,
   FormItem,
   FormControl,
   FormMessage,
+  Form,
 } from "@/components/ui/form";
-import { useToast } from "@/components/ui/use-toast";
-import { cn } from "@/lib/utils";
+
 import { validateAddTeacherSchema } from "@/validations/adminValidation";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Checkbox } from "@radix-ui/react-checkbox";
-import { Label } from "@radix-ui/react-select";
-import { Input } from "postcss";
-import { useForm, Form } from "react-hook-form";
+import { File } from "@/components/forms/file";
 
 interface IProps {
   data: IGetUser | null;
@@ -26,7 +34,7 @@ interface IProps {
 }
 
 export function EditTeacher({ data, index }: IProps) {
-  const { setSlideOver, slideOvers } = useSlideOverContext();
+  const { setSlideOver } = useSlideOverContext();
   const [file, setFile] = React.useState<string | null>(null);
 
   return (
@@ -46,6 +54,8 @@ export function EditTeacher({ data, index }: IProps) {
             subtitle="Atenção aos campos obrigatórios"
             className="px-0"
           />
+
+          <UserDataForm file={file} setFile={setFile} data={data} />
         </div>
       </SlideOver>
     </React.Fragment>
@@ -55,8 +65,9 @@ export function EditTeacher({ data, index }: IProps) {
 function UserDataForm({
   file,
   setFile,
+  data,
 }: {
-  data?: IGetUser | null;
+  data: IGetUser | null;
   file: string | null;
   setFile: (value: string | null) => void;
 }) {
@@ -67,12 +78,12 @@ function UserDataForm({
   const form = useForm<IPostUser>({
     resolver: zodResolver(validateAddTeacherSchema),
     defaultValues: {
-      name: "",
-      email: "",
-      image: "",
-      isAdmin: true,
-      isActive: true,
-      isProvider: false,
+      name: data?.name,
+      email: data?.email,
+      image: data?.image,
+      isAdmin: data?.isAdmin === "admin",
+      isActive: data?.isActive === "ativo",
+      isProvider: data?.isProvider,
     },
   });
 
