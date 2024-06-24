@@ -1,0 +1,4 @@
+.grid-in {
+  display: grid;
+  grid-template-rows: 60px auto 60px;
+}

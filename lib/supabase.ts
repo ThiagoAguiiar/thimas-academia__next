@@ -1,0 +1,20 @@
+import {
+  createClientComponentClient,
+  createRouteHandlerClient,
+} from "@supabase/auth-helpers-nextjs";
+
+import { createClient } from "@supabase/supabase-js";
+
+const URL: string = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
+const ANON: string = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
+
+export const supabaseClient = createClient(URL, ANON, {
+  auth: { persistSession: false },
+});
+
+export const supabaseComponent = createClientComponentClient();
+
+export const supabaseRouteHandler = (cookies: any) => {
+  const supabase = createRouteHandlerClient({ cookies });
+  return supabase;
+};
