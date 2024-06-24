@@ -11,7 +11,8 @@ interface IProps {
 }
 
 export function Avatar({ src, alt, setFile }: IProps) {
-  const internalSrc = src ? src : "/image-not-found.png";
+  const url = `https://jjfhzpbaxgqwvertyhmx.supabase.co/storage/v1/object/public/profile-img/${src}`;
+  const internalSrc = src ? src.startsWith("data") ? src : url : "/image-not-found.png";
 
   return (
     <div>

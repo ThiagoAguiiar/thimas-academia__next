@@ -27,6 +27,7 @@ import {
 
 import { validateAddTeacherSchema } from "@/validations/adminValidation";
 import { File } from "@/components/forms/file";
+import { Avatar } from "@/components/forms/avatar";
 
 interface IProps {
   data: IGetUser | null;
@@ -35,7 +36,7 @@ interface IProps {
 
 export function EditTeacher({ data, index }: IProps) {
   const { setSlideOver } = useSlideOverContext();
-  const [file, setFile] = React.useState<string | null>(null);
+  const [file, setFile] = React.useState<string | null>(data?.image || null);
 
   return (
     <React.Fragment>
@@ -55,6 +56,7 @@ export function EditTeacher({ data, index }: IProps) {
             className="px-0"
           />
 
+          <Avatar src={file} setFile={setFile} alt="Foto de perfil" />
           <UserDataForm file={file} setFile={setFile} data={data} />
         </div>
       </SlideOver>
