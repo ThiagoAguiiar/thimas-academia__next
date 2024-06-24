@@ -14,9 +14,9 @@ import {
 import { Badge } from "../ui/badge";
 
 import { IGetUser } from "@/types/user";
-import { TableActions } from "./table/table-actions";
-import { TableNotFound } from "./table/table-notfound";
+import { TableEmpty } from "./table/table-empty";
 import { TableLoader } from "./table/table-loader";
+import { EditTeacher } from "./teacher/edit-teacher";
 
 interface IProps {
   loading?: boolean;
@@ -31,7 +31,7 @@ interface IDataTableColumns {
   key: string;
 }
 
-export function UserDataTable({
+export function UserTable({
   loading,
   data,
   columns,
@@ -62,25 +62,19 @@ export function UserDataTable({
                     {key === "isAdmin" || key === "isActive" ? (
                       <Badge
                         variant="outline"
-                        className={
-                          key === "isActive"
-                            ? row[key] === "Ativo"
-                              ? "text-green-500"
-                              : "text-red-500"
-                            : "text-current"
-                        }
+                        className={getBadgeClass(key, row[key].toString())}
                       >
                         {row[key].toString()}
                       </Badge>
                     ) : (
-                      row[key as keyof typeof row]!.toString()
+                      row[key as keyof typeof row]?.toString()
                     )}
                   </TableCell>
                 ))}
 
                 {actions && (
                   <TableCell>
-                    <TableActions id={row.userId} isActive={row.isActive} />
+                    <EditTeacher data={row} index={index} />
                   </TableCell>
                 )}
               </TableRow>
@@ -91,5 +85,14 @@ export function UserDataTable({
     );
   }
 
-  return <TableNotFound />;
+  return <TableEmpty />;
+}
+
+// Funções auxiliares
+function getBadgeClass(key: string, value: string) {
+  if (key === "isActive") {
+    return value === "ativo" ? "text-green-500" : "text-red-500";
+  }
+
+  return "text-current";
 }

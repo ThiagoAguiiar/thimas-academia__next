@@ -6,8 +6,9 @@ import { Filter } from "@/components/admin/filter";
 import { Title } from "@/components/admin/title";
 
 import { IGetUser } from "@/types/user";
-import { UserDataTable } from "@/components/admin/user-data-table";
-import { AddTeacher } from "@/components/admin/add-teacher";
+import { UserTable } from "@/components/admin/user-table";
+import { AddTeacher } from "@/components/admin/teacher/add-teacher";
+import { SlideOver } from "@/components/dashboard/slide-over";
 
 const dataColumns = [
   {
@@ -49,7 +50,7 @@ export default function Page() {
           aux.push({
             ...item,
             isAdmin: item.isAdmin ? "Administrador" : "Colaborador",
-            isActive: item.isActive ? "Ativo" : "Inativo",
+            isActive: item.isActive ? "ativo" : "inativo",
           });
         });
 
@@ -72,7 +73,7 @@ export default function Page() {
         <AddTeacher loading={loading} />
       </div>
 
-      <UserDataTable
+      <UserTable
         data={data}
         loading={loading}
         columns={dataColumns}
