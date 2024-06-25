@@ -43,15 +43,28 @@ export function FormFooter() {
       });
 
       const json = await response.json();
+
       toast({
         title: response.status === 200 ? "Sucesso" : "Atenção",
         description: json.message,
         duration: 2500,
       });
+
+      console.log(response.statusText);
+
+      if (response.statusText === "OK") {
+        form.reset({
+          email: "",
+          name: "",
+          phoneNumber: "",
+          subject: "",
+        });
+      }
     } catch (err) {
       toast({
         title: "Erro Interno",
-        description: "Ocorreu um erro ao processar solicitação. Tente novamente mais tarde",
+        description:
+          "Ocorreu um erro ao processar solicitação. Tente novamente mais tarde",
         duration: 2500,
       });
     } finally {

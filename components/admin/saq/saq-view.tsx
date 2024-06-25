@@ -30,22 +30,26 @@ export function SaqView({ data }: { data: IGetFormData[] }) {
   const handleSubmit = async () => {
     try {
       setLoading(true);
-      const res = await fetch(`${location.origin}/api/saq/response`, {
-        method: "POST",
-        body: JSON.stringify({ email: selected?.email, response: response }),
-      });
 
-      const json = await res.json();
+      if (response.trim().length > 0) {
+        const res = await fetch(`${location.origin}/api/saq/response`, {
+          method: "POST",
+          body: JSON.stringify({ email: selected?.email, response: response }),
+        });
 
-      toast({
-        title: res.status === 200 ? "Sucesso" : "Atenção",
-        description: json.message,
-      });
+        const json = await res.json();
+
+        toast({
+          title: res.status === 200 ? "Sucesso" : "Atenção",
+          description: json.message,
+          duration: 2000,
+        });
+      }
     } catch (err) {
       toast({
         title: "Erro Interno",
-        description:
-          "Ocorreu um erro ao enviar mensagem. Tente novamente mais tarde",
+        description: "Ocorreu um erro ao enviar mensagem. Tente novamente mais tarde",
+        duration: 2000,
       });
     } finally {
       setLoading(false);
@@ -75,7 +79,11 @@ export function SaqView({ data }: { data: IGetFormData[] }) {
               onChange={(e) => setResponse(e.target.value)}
               placeholder={`Enviar resposta para ${selected.name}`}
             />
-            <Button loading={loading} onClick={handleSubmit}>
+            <Button
+              className="gap-x-2"
+              loading={loading}
+              onClick={handleSubmit}
+            >
               Enviar Resposta
             </Button>
           </div>

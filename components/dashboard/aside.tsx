@@ -1,6 +1,14 @@
-import { Barbell, ChatCircle, Gear, House, User } from "@phosphor-icons/react/dist/ssr";
+import {
+  Barbell,
+  ChatCircle,
+  Gear,
+  House,
+  SquaresFour,
+  User,
+} from "@phosphor-icons/react/dist/ssr";
 import { AsideLink } from "./aside-link";
 import "./aside.css";
+import { Logo } from "../navigate/logo";
 
 const asideLinks = {
   admin: [
@@ -24,6 +32,11 @@ const asideLinks = {
       href: "/admin/contato",
       icon: <ChatCircle size={20} />,
     },
+    {
+      label: "Modalidades",
+      href: "/admin/modalidades",
+      icon: <SquaresFour size={20} />,
+    },
   ],
 };
 
@@ -31,9 +44,11 @@ export function Aside() {
   return (
     <aside className="w-[250px] min-w-[250px] h-full border-r border-r-[#e9e9e9]">
       <div className="w-full h-screen grid-in p-7">
-        <div></div>
+        <div className="mx-auto">
+          <Logo />
+        </div>
 
-        <div>
+        <div className="border-t pt-5">
           <p className="text-[13px] font-medium text-gray-500 mb-3">
             Informações Gerais
           </p>

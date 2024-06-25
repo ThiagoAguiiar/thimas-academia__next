@@ -6,7 +6,7 @@ import { Filter } from "@/components/admin/filter";
 import { Title } from "@/components/admin/title";
 
 import { IGetUser } from "@/types/user";
-import { UserTable } from "@/components/admin/user-table";
+import { UserTable } from "@/components/admin/user/user-table";
 import { AddUser } from "@/components/admin/user/add-user";
 
 const dataColumns = [

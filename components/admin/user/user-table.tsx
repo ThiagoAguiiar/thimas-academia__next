@@ -11,12 +11,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Badge } from "../ui/badge";
-
+import { Badge } from "@/components/ui/badge";
 import { IGetUser } from "@/types/user";
-import { TableEmpty } from "./table/table-empty";
-import { TableLoader } from "./table/table-loader";
-import { EditUser } from "./user/edit-user";
+import { TableEmpty } from "@/components/admin/table/table-empty";
+import { TableLoader } from "@/components/admin/table/table-loader";
+import { EditUser } from "@/components/admin/user/edit-user";
 
 interface IProps {
   loading?: boolean;

@@ -26,11 +26,12 @@ export async function getUsers(
   return { ...response };
 }
 
-export async function getUserByEmail(email: string) {
+export async function getUserByEmail(email: string, isActive: boolean = true) {
   const response = await supabaseComponent
     .from("user")
     .select("*")
-    .eq("email", email);
+    .eq("email", email)
+    .eq("isActive", isActive);
 
   return { ...response };
 }
