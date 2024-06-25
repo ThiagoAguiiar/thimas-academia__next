@@ -6,7 +6,7 @@ import { IGetFormData } from "@/types/footer";
 import Link from "next/link";
 import React from "react";
 
-export async function fetchData(): Promise<{ data: IGetFormData[] | null }> {
+async function fetchData(): Promise<{ data: IGetFormData[] | null }> {
   const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL!}/api/saq`, {
     cache: "no-cache",
   });

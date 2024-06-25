@@ -153,7 +153,10 @@ export async function PUT(req: NextRequest) {
       await uploadFiles(file, "profile-img", imageId);
     }
 
-    const { data, error, status } = await updateUser({ ...obj });
+    const { data, error, status } = await updateUser({
+      ...obj,
+      password: obj.password || null,
+    });
 
     if (error !== null) {
       return handleResponse(
