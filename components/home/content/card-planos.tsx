@@ -57,9 +57,9 @@ export function CardPlanos({
 
         <div className={`px-5 pb-5 text-center text-[15px] space-y-5`}>
           <div className="space-y-2">
-            {data.map(({ avaiable, text }) => {
+            {data.map(({ avaiable, text }, index) => {
               return (
-                <p className="flex items-center gap-x-1">
+                <p key={index} className="flex items-center gap-x-1">
                   {avaiable ? (
                     <CheckCircle size={20} color="green" />
                   ) : (
