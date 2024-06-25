@@ -16,7 +16,7 @@ import { Badge } from "../ui/badge";
 import { IGetUser } from "@/types/user";
 import { TableEmpty } from "./table/table-empty";
 import { TableLoader } from "./table/table-loader";
-import { EditTeacher } from "./teacher/edit-teacher";
+import { EditUser } from "./user/edit-user";
 
 interface IProps {
   loading?: boolean;
@@ -50,6 +50,8 @@ export function UserTable({
             {columns.map(({ label }, index) => (
               <TableHead key={index}>{label}</TableHead>
             ))}
+
+            <TableHead>Informações</TableHead>
           </TableRow>
         </TableHeader>
 
@@ -74,7 +76,7 @@ export function UserTable({
 
                 {actions && (
                   <TableCell>
-                    <EditTeacher data={row} index={index} />
+                    <EditUser data={row} index={index} />
                   </TableCell>
                 )}
               </TableRow>

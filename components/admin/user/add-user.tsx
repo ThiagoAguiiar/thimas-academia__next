@@ -2,67 +2,62 @@
 
 import React from "react";
 
-import { ArrowSquareIn } from "@phosphor-icons/react/dist/ssr";
-
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { useSlideOverContext } from "@/contexts/slideOverContext";
-import { IGetUser, IPutUser } from "@/types/user";
-import { cn } from "@/lib/utils";
-
-import { SlideOver } from "@/components/dashboard/slide-over";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Title } from "../title";
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/components/ui/use-toast";
+import { Plus } from "@phosphor-icons/react/dist/ssr";
+import { useSlideOverContext } from "@/contexts/slideOverContext";
+import { SlideOver } from "@/components/dashboard/slide-over";
+import { Title } from "@/components/admin/title";
 import {
+  Form,
+  FormControl,
   FormField,
   FormItem,
-  FormControl,
   FormMessage,
-  Form,
 } from "@/components/ui/form";
-
-import { validatePutTeacherSchema } from "@/validations/adminValidation";
+import { useForm } from "react-hook-form";
+import { IGetUser, IPostUser } from "@/types/user";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { validateAddTeacherSchema } from "@/validations/adminValidation";
 import { File } from "@/components/forms/file";
 import { Avatar } from "@/components/forms/avatar";
+import { useToast } from "@/components/ui/use-toast";
+import { cn } from "@/lib/utils";
 
 interface IProps {
-  data: IGetUser | null;
-  index: number;
+  loading?: boolean;
 }
 
-export function EditTeacher({ data, index }: IProps) {
-  const { setSlideOver } = useSlideOverContext();
-  const [file, setFile] = React.useState<string | null>(data?.image || null);
+export function AddUser({ loading }: IProps) {
+  const [file, setFile] = React.useState<string | null>(null);
+  const { setSlideOver, slideOvers } = useSlideOverContext();
 
   return (
     <React.Fragment>
-      <div
-        className="flex items-center gap-x-2 cursor-pointer text-[#ff1e00] hover:bg-[#ff1e001c] w-fit px-2 py-1.5 rounded-md"
-        onClick={() => setSlideOver(`edit-teacher-${index}`, true)}
+      <Button
+        type="button"
+        className="text-[13px] gap-x-2"
+        size="sm"
+        variant="outline"
+        disabled={loading}
+        onClick={() => setSlideOver("add-user", !slideOvers["add-user"])}
       >
-        <ArrowSquareIn size={18} />
-        Visualizar
-      </div>
+        <Plus size={20} />
+        Novo usuário
+      </Button>
 
-      <SlideOver id={`edit-teacher-${index}`} width={500}>
+      <SlideOver id="add-user" width={500}>
         <div className="space-y-5">
           <Title
-            title={`Dados de ${data?.name}`}
-            subtitle="Atenção aos campos obrigatórios"
+            title="Novo Usuário"
+            subtitle="Preencha os campos obrigatórios abaixo"
             className="px-0"
           />
 
           <Avatar src={file} setFile={setFile} alt="Foto de perfil" />
-          <UserDataForm
-            file={file}
-            setFile={setFile}
-            data={data}
-            index={index}
-          />
+          <UserDataForm file={file} setFile={setFile} />
         </div>
       </SlideOver>
     </React.Fragment>
@@ -72,45 +67,38 @@ export function EditTeacher({ data, index }: IProps) {
 function UserDataForm({
   file,
   setFile,
-  data,
-  index,
 }: {
-  data: IGetUser | null;
+  data?: IGetUser | null;
   file: string | null;
   setFile: (value: string | null) => void;
-  index: number;
 }) {
   const [internalLoading, setInternalLoading] = React.useState(false);
   const { setSlideOver } = useSlideOverContext();
   const { toast } = useToast();
 
-  const form = useForm<IPutUser>({
-    resolver: zodResolver(validatePutTeacherSchema),
+  const form = useForm<IPostUser>({
+    resolver: zodResolver(validateAddTeacherSchema),
     defaultValues: {
-      userId: data?.userId,
-      name: data?.name,
-      email: data?.email,
-      image: data?.image,
-      isAdmin: data?.isAdmin === "Administrador",
-      isActive: data?.isActive === "ativo",
-      isProvider: data?.isProvider,
-      password: "",
+      name: "",
+      email: "",
+      image: "",
+      isAdmin: false,
+      isActive: true,
+      isProvider: false,
     },
   });
 
-  const handleSubmit = async (value: IPutUser) => {
+  const handleSubmit = async (value: IPostUser) => {
     try {
       setInternalLoading(true);
 
       const response = await fetch(`${location.origin}/api/user`, {
-        method: "PUT",
+        method: "POST",
         body: JSON.stringify({ ...value, image: file }),
       });
 
-      console.log(response.statusText);
-
-      if (response.statusText === "OK") {
-        setSlideOver(`edit-teacher-${index}`, false);
+      if (response.statusText === "Created") {
+        setSlideOver("add-user", false);
       }
 
       const json = await response.json();
@@ -141,6 +129,13 @@ function UserDataForm({
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)}>
         <div className="space-y-2">
+          <FormItem>
+            <Label>Upload Foto de Perfil</Label>
+            <FormControl>
+              <File file={file} setFile={setFile} />
+            </FormControl>
+          </FormItem>
+
           <FormField
             name="name"
             control={form.control}
@@ -189,13 +184,6 @@ function UserDataForm({
             }}
           />
 
-          <FormItem>
-            <Label>Upload Foto de Perfil</Label>
-            <FormControl>
-              <File file={file} setFile={setFile} />
-            </FormControl>
-          </FormItem>
-
           <FormField
             name="isActive"
             control={form.control}
@@ -222,17 +210,54 @@ function UserDataForm({
               );
             }}
           />
+
+          <FormField
+            name="isAdmin"
+            control={form.control}
+            render={({ field }) => {
+              return (
+                <FormItem className="flex items-end gap-x-2">
+                  <FormControl>
+                    <Checkbox
+                      {...field}
+                      onCheckedChange={(e) => {
+                        e
+                          ? form.setValue("isAdmin", true)
+                          : form.setValue("isAdmin", false);
+                      }}
+                      value={field.value.toString()}
+                      checked={field.value}
+                    />
+                  </FormControl>
+
+                  <Label>
+                    {field.value.toString() == "true"
+                      ? "Administrador"
+                      : "Aluno"}
+                  </Label>
+                </FormItem>
+              );
+            }}
+          />
         </div>
 
-        <div className="mt-5 flex justify-end">
+        <div className="mt-5 flex justify-end gap-x-2">
           <Button
-            type="submit"
+            size="sm"
+            type="button"
+            variant="outline"
+            onClick={() => setSlideOver(`add-user`, false)}
+          >
+            Cancelar
+          </Button>
+
+          <Button
             size="sm"
             className="bg-[#ff1e00] hover:bg-[#ff1e00] gap-x-2"
             loading={internalLoading}
             disabled={internalLoading}
           >
-            Atualizar
+            Cadastrar
           </Button>
         </div>
       </form>

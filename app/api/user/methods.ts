@@ -65,7 +65,7 @@ export async function createUser(user: IPostUser): Promise<IUserResponse> {
 }
 
 export async function updateUser(user: IGetUser): Promise<IUserResponse> {
-  if (user.password !== null) {
+  if (user.password && user.password.length > 0) {
     const response = await supabaseComponent
       .from("user")
       .update({

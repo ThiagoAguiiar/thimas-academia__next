@@ -19,10 +19,6 @@ const dataColumns = [
     key: "email",
   },
   {
-    label: "Administrador",
-    key: "isAdmin",
-  },
-  {
     label: "Status",
     key: "isActive",
   },
@@ -39,7 +35,7 @@ export default function Page() {
       try {
         setLoading(true);
 
-        const url = `${location.origin}/api/user?name=${name}&isActive=${isActive}&isAdmin=admin`;
+        const url = `${location.origin}/api/user?name=${name}&isActive=${isActive}&isAdmin=colaborador`;
         const response = await fetch(url);
         const json = await response.json();
 
@@ -65,7 +61,7 @@ export default function Page() {
 
   return (
     <div>
-      <Title title="Professores" subtitle="Lista de professores da academia" />
+      <Title title="Alunos" subtitle="Lista de alunos da academia" />
       <Filter setName={setName} setIsActive={setIsActive} loading={loading} />
 
       <div className="px-5 mb-4">
