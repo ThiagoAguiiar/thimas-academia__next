@@ -12,9 +12,7 @@ export function Banner() {
   const router = useRouter();
 
   return (
-    <div
-      className={`h-[500px] bg-black text-white relative ${bebas.className}`}
-    >
+    <div className={"h-[500px] bg-black text-white relative"}>
       <Image
         src="/hero.png"
         alt="Hero Banner - Homem fazendo levantamento de peso"
@@ -25,7 +23,7 @@ export function Banner() {
 
       <div className="w-[90%] mx-auto h-full relative z-50 flex items-center max-[420px]:items-end max-[420px]:pb-10">
         <div className="space-y-5">
-          <div className="space-y-2">
+          <div className={`${bebas.className} space-y-2`}>
             <h1 className="text-[60px] leading-none max-[420px]:text-[50px]">
               O resultado não é foco,{" "}
               <span className="block max-[725px]:inline-block">é hábito</span>
@@ -35,7 +33,10 @@ export function Banner() {
               Matricule-se já e comece sua transformação hoje mesmo
             </h2>
           </div>
-          <Button onClick={() => router.push("/#planos")}>
+          <Button
+            className="rounded-full bg-[#ff1e00] hover:bg-[#d71900]"
+            onClick={() => router.push("/#planos")}
+          >
             <span className="text-[15px]">Matricule-se</span>
           </Button>
         </div>

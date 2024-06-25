@@ -1,4 +1,4 @@
-import { Barbell, Gear, House, User } from "@phosphor-icons/react/dist/ssr";
+import { Barbell, ChatCircle, Gear, House, User } from "@phosphor-icons/react/dist/ssr";
 import { AsideLink } from "./aside-link";
 import "./aside.css";
 
@@ -18,6 +18,11 @@ const asideLinks = {
       label: "Alunos",
       href: "/admin/alunos",
       icon: <User size={20} />,
+    },
+    {
+      label: "Contato",
+      href: "/admin/contato",
+      icon: <ChatCircle size={20} />,
     },
   ],
 };

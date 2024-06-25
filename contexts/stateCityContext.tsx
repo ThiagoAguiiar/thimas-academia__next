@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import React from 'react';
+import React from "react";
 
 interface IStateData {
   id: number;
@@ -14,10 +14,12 @@ interface IStateData {
 }
 
 interface ICityData {
-  'regiao-imediata': {
+  id: number;
+  nome: string;
+  microrregiao: {
     id: number;
     nome: string;
-    'regiao-intermediaria': {
+    mesorregiao: {
       id: number;
       nome: string;
       UF: {
@@ -55,8 +57,8 @@ interface IStateCityContext {
 const StateCityContext = React.createContext<IStateCityContext | null>(null);
 
 export const StateCityProvider = ({ children }: IChildren) => {
-  const [selectCity, setSelectedCity] = React.useState<string>('');
-  const [selectState, setSelectedState] = React.useState<string>('');
+  const [selectCity, setSelectedCity] = React.useState<string>("");
+  const [selectState, setSelectedState] = React.useState<string>("");
 
   const [states, setStates] = React.useState<IOptions[]>([]);
   const [cities, setCities] = React.useState<IOptions[]>([]);
@@ -64,7 +66,7 @@ export const StateCityProvider = ({ children }: IChildren) => {
   React.useEffect(() => {
     const fetchEstados = async () => {
       const response = await fetch(
-        'https://servicodados.ibge.gov.br/api/v1/localidades/estados'
+        "https://servicodados.ibge.gov.br/api/v1/localidades/estados"
       );
       const json: IStateData[] = await response.json();
 
@@ -89,24 +91,13 @@ export const StateCityProvider = ({ children }: IChildren) => {
         );
 
         const json: ICityData[] = await response.json();
-        const aux: IOptions[] = [];
 
-        json.sort((a, b) =>
-          a['regiao-imediata'].nome.localeCompare(b['regiao-imediata'].nome)
-        );
+        json.sort((a, b) => a.nome.localeCompare(b.nome));
 
-        json.forEach((item) => {
-          const existingOption = aux.find(
-            (option) => option.value === item['regiao-imediata'].id.toString()
-          );
-
-          if (!existingOption) {
-            aux.push({
-              label: item['regiao-imediata'].nome,
-              value: item['regiao-imediata'].id.toString(),
-            });
-          }
-        });
+        const aux: IOptions[] = json.map(({ nome, id }) => ({
+          label: nome,
+          value: id.toString(),
+        }));
 
         setCities(aux);
       };
@@ -116,7 +107,7 @@ export const StateCityProvider = ({ children }: IChildren) => {
       setCities([]);
     }
 
-    setSelectedCity('');
+    setSelectedCity("");
   }, [selectState]);
 
   return (
@@ -138,7 +129,7 @@ export const StateCityProvider = ({ children }: IChildren) => {
 export const useStateCityContext = () => {
   const context = React.useContext(StateCityContext);
   if (!context) {
-    throw new Error('Erro ao usar StateCityContext');
+    throw new Error("Erro ao usar StateCityContext");
   }
   return context;
 };

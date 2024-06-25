@@ -82,13 +82,13 @@ export function Modalidades() {
           Você poderá incluir ou trocar de modalidade quando quiser. Para isso,
           basta entrar em contato com sua unidade ou realizar o{" "}
           <Link href="/contato" className="underline text-[#ff4500]">
-            pedido pelo site.
+            pedido pelo WhatsApp.
           </Link>
         </p>
 
         <div className="flex flex-wrap justify-center gap-3">
           <Button
-            className="justify-center max-[370px]:w-full"
+            className="rounded-full bg-[#ff1e00] hover:bg-[#d71900] justify-center max-[370px]:w-full"
             onClick={() => router.push("/#planos")}
           >
             <span className="text-[15px]">Matricule-se</span>
@@ -97,7 +97,7 @@ export function Modalidades() {
           <Button
             variant="outline"
             color="#000"
-            className="justify-center max-[370px]:w-full"
+            className="rounded-full justify-center max-[370px]:w-full"
             onClick={() => router.push("/#contato")}
           >
             <span className="text-[15px]">Entre em contato</span>

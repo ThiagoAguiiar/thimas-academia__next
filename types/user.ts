@@ -23,7 +23,7 @@ export interface IPutUser {
   userId: string;
   name: string;
   email: string;
-  password: string;
+  password?: string;
   image: string | null;
   isProvider: boolean;
   isActive: boolean;

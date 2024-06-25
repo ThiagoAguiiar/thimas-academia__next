@@ -1,9 +1,7 @@
 import "../planos.css";
 
 import { Button } from "@/components/ui/button";
-
 import { CheckCircle, XCircle } from "@phosphor-icons/react/dist/ssr";
-
 import { Bebas_Neue } from "next/font/google";
 
 const bebas = Bebas_Neue({ subsets: ["latin"], weight: ["400"] });
@@ -81,7 +79,10 @@ export function CardPlanos({
           </div>
 
           <div>
-            <Button className="w-full justify-center" color={color}>
+            <Button
+              className={`rounded-full w-full justify-center`}
+              style={{ background: color }}
+            >
               Quero esse
             </Button>
           </div>

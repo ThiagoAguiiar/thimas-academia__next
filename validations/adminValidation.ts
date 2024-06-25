@@ -16,7 +16,12 @@ export const validatePutTeacherSchema: z.ZodType<IPutUser> = z.object({
   name: z.string().min(1, "Preencha o campo corretamente"),
   email: z.string().email("Insira um email válido"),
   image: z.string().nullable(),
-  password: z.string(),
+  password: z
+    .string()
+    .optional()
+    .refine((value) => !value || value.length >= 6, {
+      message: "A senha deve conter no mínimo 6 caracteres",
+    }),
   isProvider: z.boolean(),
   isAdmin: z.boolean(),
   isActive: z.boolean(),

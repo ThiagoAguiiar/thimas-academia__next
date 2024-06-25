@@ -1,19 +1,12 @@
-import { hashPassword } from "@/lib/password";
 import { supabaseComponent } from "@/lib/supabase";
 import { IGetUser, IPostUser } from "@/types/user";
 import { PostgrestError } from "@supabase/supabase-js";
-
-interface IUserResponse {
-  data: IGetUser[] | null;
-  error: PostgrestError | null;
-  status: number;
-}
 
 export async function getUsers(
   name: string,
   isActive: boolean = true,
   isAdmin: boolean = false
-): Promise<IUserResponse> {
+) {
   if (name.trim().length > 0) {
     const response = await supabaseComponent
       .from("user")
@@ -21,11 +14,7 @@ export async function getUsers(
       .ilike("name", `%${name}%`)
       .eq("isActive", isActive);
 
-    return {
-      data: response.data,
-      error: response.error,
-      status: response.status,
-    };
+    return { ...response };
   }
 
   const response = await supabaseComponent
@@ -34,37 +23,25 @@ export async function getUsers(
     .eq("isAdmin", isAdmin)
     .eq("isActive", isActive);
 
-  return {
-    data: response.data,
-    error: response.error,
-    status: response.status,
-  };
+  return { ...response };
 }
 
-export async function getUserByEmail(email: string): Promise<IUserResponse> {
+export async function getUserByEmail(email: string) {
   const response = await supabaseComponent
     .from("user")
     .select("*")
     .eq("email", email);
 
-  return {
-    data: response.data,
-    error: response.error,
-    status: response.status,
-  };
+  return { ...response };
 }
 
-export async function createUser(user: IPostUser): Promise<IUserResponse> {
+export async function createUser(user: IPostUser) {
   const response = await supabaseComponent.from("user").insert([user]);
 
-  return {
-    data: response.data,
-    error: response.error,
-    status: response.status,
-  };
+  return { ...response };
 }
 
-export async function updateUser(user: IGetUser): Promise<IUserResponse> {
+export async function updateUser(user: IGetUser) {
   if (user.password && user.password.length > 0) {
     const response = await supabaseComponent
       .from("user")
@@ -79,11 +56,7 @@ export async function updateUser(user: IGetUser): Promise<IUserResponse> {
       })
       .eq("userId", user.userId);
 
-    return {
-      data: response.data,
-      error: response.error,
-      status: response.status,
-    };
+    return { ...response };
   }
 
   const response = await supabaseComponent
@@ -98,9 +71,5 @@ export async function updateUser(user: IGetUser): Promise<IUserResponse> {
     })
     .eq("userId", user.userId);
 
-  return {
-    data: response.data,
-    error: response.error,
-    status: response.status,
-  };
+  return { ...response };
 }

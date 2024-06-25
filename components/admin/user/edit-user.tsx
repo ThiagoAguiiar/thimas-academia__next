@@ -152,7 +152,7 @@ function UserDataForm({
             render={({ field }) => {
               return (
                 <FormItem>
-                  <Label>Nome</Label>
+                  <Label required>Nome</Label>
                   <FormControl>
                     <Input {...field} autoComplete="off" />
                   </FormControl>
@@ -168,7 +168,7 @@ function UserDataForm({
             render={({ field }) => {
               return (
                 <FormItem>
-                  <Label>Email</Label>
+                  <Label required>Email</Label>
                   <FormControl>
                     <Input {...field} autoComplete="off" />
                   </FormControl>
