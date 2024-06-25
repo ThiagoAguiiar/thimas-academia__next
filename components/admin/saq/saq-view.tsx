@@ -5,12 +5,14 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 import { IGetFormData } from "@/types/footer";
 import { Info } from "@phosphor-icons/react/dist/ssr";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import React from "react";
+import { revalidateSaq } from "../actions";
 
 export function SaqView({ data }: { data: IGetFormData[] }) {
   const params = useSearchParams().get("id");
+  const router = useRouter();
 
   const { toast } = useToast();
 
@@ -34,8 +36,16 @@ export function SaqView({ data }: { data: IGetFormData[] }) {
       if (response.trim().length > 0) {
         const res = await fetch(`${location.origin}/api/saq/response`, {
           method: "POST",
-          body: JSON.stringify({ email: selected?.email, response: response }),
+          body: JSON.stringify({
+            ...selected,
+            response: response,
+          }),
         });
+
+        if (res.statusText === "OK") {
+          router.push("/admin/contato");
+          await revalidateSaq();
+        }
 
         const json = await res.json();
 
@@ -48,7 +58,8 @@ export function SaqView({ data }: { data: IGetFormData[] }) {
     } catch (err) {
       toast({
         title: "Erro Interno",
-        description: "Ocorreu um erro ao enviar mensagem. Tente novamente mais tarde",
+        description:
+          "Ocorreu um erro ao enviar mensagem. Tente novamente mais tarde",
         duration: 2000,
       });
     } finally {

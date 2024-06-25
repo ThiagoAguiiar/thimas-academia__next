@@ -23,6 +23,7 @@ export async function POST(req: NextRequest) {
       name: name,
       phoneNumber: phoneNumber,
       subject: subject,
+      isActive: true,
     });
 
     if (error !== null) {

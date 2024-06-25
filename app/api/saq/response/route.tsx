@@ -1,10 +1,13 @@
 import { NextRequest } from "next/server";
 import { handleResponse } from "../../utils/handleError";
 import { sendEmail } from "../../utils/smtp";
+import { updateSaq } from "../methods";
+import { IPutFormData } from "@/types/footer";
 
 export async function POST(req: NextRequest) {
   try {
-    const { email, response } = await req.json();
+    const { email, response, createdAt, name, phoneNumber, saqId, subject } =
+      await req.json();
 
     if (!email || !response) {
       return handleResponse(
@@ -15,6 +18,18 @@ export async function POST(req: NextRequest) {
         "error"
       );
     }
+
+    const saq: IPutFormData = {
+      createdAt: createdAt,
+      email: email,
+      isActive: false,
+      name: name,
+      phoneNumber: phoneNumber,
+      saqId: saqId,
+      subject: subject,
+    };
+
+    const { data: x, error: y } = await updateSaq({ ...saq });
 
     const { data, error } = await sendEmail(
       email,

@@ -3,6 +3,7 @@ export interface IPostFormData {
   name: string;
   phoneNumber: string;
   subject: string;
+  isActive: boolean;
 }
 
 export interface IGetFormData {
@@ -12,4 +13,15 @@ export interface IGetFormData {
   name: string;
   phoneNumber: string;
   subject: string;
+  isActive: boolean;
+}
+
+export interface IPutFormData {
+  saqId: string;
+  createdAt: string;
+  email: string;
+  name: string;
+  phoneNumber: string;
+  subject: string;
+  isActive: boolean;
 }

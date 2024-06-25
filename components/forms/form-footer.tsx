@@ -18,6 +18,7 @@ import { Button } from "../ui/button";
 
 import { IPostFormData } from "@/types/footer";
 import { useToast } from "../ui/use-toast";
+import { revalidateSaq } from "../admin/actions";
 
 export function FormFooter() {
   const [loading, setLoading] = React.useState(false);
@@ -31,6 +32,7 @@ export function FormFooter() {
       subject: "",
       name: "",
       phoneNumber: "",
+      isActive: true,
     },
   });
 
@@ -50,8 +52,6 @@ export function FormFooter() {
         duration: 2500,
       });
 
-      console.log(response.statusText);
-
       if (response.statusText === "OK") {
         form.reset({
           email: "",
@@ -59,6 +59,8 @@ export function FormFooter() {
           phoneNumber: "",
           subject: "",
         });
+
+        await revalidateSaq();
       }
     } catch (err) {
       toast({

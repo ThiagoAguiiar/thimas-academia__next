@@ -1,12 +1,16 @@
 import Image from "next/image";
 
-export function NotFound() {
+interface IProps {
+  text?: string;
+}
+
+export function NotFound({
+  text = "Nenhum resultado foi encontrado para a pesquisa",
+}: IProps) {
   return (
     <div className="text-center">
       <p className="text-[25px] font-bold text-[#ff1e00]">Ops!</p>
-      <p className="text-[16px] text-gray-500">
-        Nenhum resultado foi encontrado para a pesquisa
-      </p>
+      <p className="text-[16px] text-gray-500">{text}</p>
 
       <Image
         src="/not-found.svg"

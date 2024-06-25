@@ -10,6 +10,7 @@ import { Toaster } from "@/components/ui/toaster";
 import NextTopLoader from "nextjs-toploader";
 import { StateCityProvider } from "@/contexts/stateCityContext";
 import { Footer } from "@/components/navigate/footer";
+import { Navbar } from "@/components/navigate/navbar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,6 +26,7 @@ export default function RootLayout({ children }: Readonly<IChildren>) {
         <StateCityProvider>
           <SlideOverProvider>
             <NextTopLoader color="#ff1e00" showSpinner={false} height={3} />
+            <Navbar />
             {children}
             <Toaster />
             <Footer />
