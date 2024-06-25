@@ -129,7 +129,7 @@ export default function Page() {
 
           <Button
             type="submit"
-            className="text-[15px] w-full justify-center rounded-md bg-[#ff1e00] hover:bg-[#d71900]"
+            className="gap-x-2 text-[15px] w-full justify-center rounded-md bg-[#ff1e00] hover:bg-[#d71900]"
             loading={loading}
           >
             Entrar

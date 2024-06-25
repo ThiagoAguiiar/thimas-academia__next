@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getUserByEmail } from "../../user/methods";
 
 import jwt from "jsonwebtoken";
+import { comparePassword } from "@/lib/password";
 
 export async function POST(req: NextRequest) {
   try {
@@ -21,7 +22,6 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const supabase = supabaseRouteHandler(cookies);
     const { data, error } = await getUserByEmail(email);
 
     if (error || !data || data.length === 0) {
@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
 
     const user = data[0];
 
-    if (user.isActive) {
+    if (user.isActive && (await comparePassword(password, user.password))) {
       const token = jwt.sign(
         { email: user.email, isAdmin: user.isAdmin },
         process.env.NEXT_PUBLIC_JWT_SECRET!

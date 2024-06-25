@@ -1,13 +1,12 @@
 export function CardUnidades() {
   return (
     <div className="w-full space-y-2">
-      <p className="font-medium">20 Resultados encontrados</p>
+      <p className="font-medium">2 Resultados encontrados</p>
 
       <div>
         <div className="px-5 py-4 border-b border-b-[#808080]">
           <h4 className="font-semibold">
-            Rua Dr. Euridíce José Bento, 599 - Jardim do Lago Continuação -
-            Campinas/SP
+            Rua Dr. Luíz Otávio Miranda, 599 - Jardim Luz - Campinas/SP
           </h4>
           <p className="text-[#808080] text-[14px]">Próximo ao mercado XYZ</p>
           <a

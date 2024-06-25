@@ -21,16 +21,16 @@ export function Planos() {
             },
             {
               avaiable: false,
-              text: "Aulas de natação",
+              text: "Acesso a todos os equipamentos",
             },
             {
               avaiable: false,
-              text: "Aulas de natação",
+              text: "Acesso a todos os equipamentos",
             },
           ]}
           price={{
-            month: "R$ 50,00",
-            semester: "R$ 300,00",
+            month: "R$ 39,90",
+            semester: "R$ 159,90",
           }}
         />
 
@@ -71,14 +71,10 @@ export function Planos() {
               avaiable: true,
               text: "Acesso a todos os equipamentos",
             },
-            {
-              avaiable: false,
-              text: "Aulas de natação",
-            },
           ]}
           price={{
             month: "R$ 50,00",
-            semester: "R$ 300,00",
+            semester: "R$ 250,00",
           }}
         />
 
@@ -96,13 +92,21 @@ export function Planos() {
               text: "Acesso a todos os equipamentos",
             },
             {
+              avaiable: true,
+              text: "Acesso a todos os equipamentos",
+            },
+            {
+              avaiable: true,
+              text: "Acesso a todos os equipamentos",
+            },
+            {
               avaiable: false,
-              text: "Aulas de natação",
+              text: "Acesso a todos os equipamentos",
             },
           ]}
           price={{
-            month: "R$ 50,00",
-            semester: "R$ 300,00",
+            month: "R$ 49,90",
+            semester: "R$ 189,90",
           }}
         />
       </div>

@@ -1,6 +1,5 @@
 import { supabaseComponent } from "@/lib/supabase";
 import { IGetUser, IPostUser } from "@/types/user";
-import { PostgrestError } from "@supabase/supabase-js";
 
 export async function getUsers(
   name: string,
