@@ -7,6 +7,7 @@ import { SlideOverProvider } from "@/contexts/slideOverContext";
 import { Toaster } from "@/components/ui/toaster";
 
 import NextTopLoader from "nextjs-toploader";
+import { StateCityProvider } from "@/contexts/stateCityContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,11 +20,13 @@ export default function RootLayout({ children }: Readonly<IChildren>) {
   return (
     <html lang="pt-br">
       <body className={inter.className}>
-        <SlideOverProvider>
-          <NextTopLoader />
-          {children}
-          <Toaster />
-        </SlideOverProvider>
+        <StateCityProvider>
+          <SlideOverProvider>
+            <NextTopLoader color="#ff1e00" showSpinner={false} height={3} />
+            {children}
+            <Toaster />
+          </SlideOverProvider>
+        </StateCityProvider>
       </body>
     </html>
   );
