@@ -7,7 +7,7 @@ import { ArrowSquareIn } from "@phosphor-icons/react/dist/ssr";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useSlideOverContext } from "@/contexts/slideOverContext";
-import { IGetUser, IPostUser } from "@/types/user";
+import { IGetUser, IPutUser } from "@/types/user";
 import { cn } from "@/lib/utils";
 
 import { SlideOver } from "@/components/dashboard/slide-over";
@@ -25,7 +25,7 @@ import {
   Form,
 } from "@/components/ui/form";
 
-import { validateAddTeacherSchema } from "@/validations/adminValidation";
+import { validatePutTeacherSchema } from "@/validations/adminValidation";
 import { File } from "@/components/forms/file";
 import { Avatar } from "@/components/forms/avatar";
 
@@ -41,7 +41,7 @@ export function EditTeacher({ data, index }: IProps) {
   return (
     <React.Fragment>
       <div
-        className="flex items-center gap-x-2"
+        className="flex items-center gap-x-2 cursor-pointer text-[#ff1e00] hover:bg-[#ff1e001c] w-fit px-2 py-1.5 rounded-md"
         onClick={() => setSlideOver(`edit-teacher-${index}`, true)}
       >
         <ArrowSquareIn size={18} />
@@ -57,7 +57,12 @@ export function EditTeacher({ data, index }: IProps) {
           />
 
           <Avatar src={file} setFile={setFile} alt="Foto de perfil" />
-          <UserDataForm file={file} setFile={setFile} data={data} />
+          <UserDataForm
+            file={file}
+            setFile={setFile}
+            data={data}
+            index={index}
+          />
         </div>
       </SlideOver>
     </React.Fragment>
@@ -68,38 +73,44 @@ function UserDataForm({
   file,
   setFile,
   data,
+  index,
 }: {
   data: IGetUser | null;
   file: string | null;
   setFile: (value: string | null) => void;
+  index: number;
 }) {
   const [internalLoading, setInternalLoading] = React.useState(false);
   const { setSlideOver } = useSlideOverContext();
   const { toast } = useToast();
 
-  const form = useForm<IPostUser>({
-    resolver: zodResolver(validateAddTeacherSchema),
+  const form = useForm<IPutUser>({
+    resolver: zodResolver(validatePutTeacherSchema),
     defaultValues: {
+      userId: data?.userId,
       name: data?.name,
       email: data?.email,
       image: data?.image,
-      isAdmin: data?.isAdmin === "admin",
+      isAdmin: data?.isAdmin === "Administrador",
       isActive: data?.isActive === "ativo",
       isProvider: data?.isProvider,
+      password: "",
     },
   });
 
-  const handleSubmit = async (value: IPostUser) => {
+  const handleSubmit = async (value: IPutUser) => {
     try {
       setInternalLoading(true);
 
       const response = await fetch(`${location.origin}/api/user`, {
-        method: "POST",
+        method: "PUT",
         body: JSON.stringify({ ...value, image: file }),
       });
 
-      if (response.statusText === "Created") {
-        setSlideOver("view-teacher", false);
+      console.log(response.statusText);
+
+      if (response.statusText === "OK") {
+        setSlideOver(`edit-teacher-${index}`, false);
       }
 
       const json = await response.json();
@@ -215,12 +226,13 @@ function UserDataForm({
 
         <div className="mt-5 flex justify-end">
           <Button
+            type="submit"
             size="sm"
             className="bg-[#ff1e00] hover:bg-[#ff1e00] gap-x-2"
             loading={internalLoading}
             disabled={internalLoading}
           >
-            Cadastrar
+            Atualizar
           </Button>
         </div>
       </form>
