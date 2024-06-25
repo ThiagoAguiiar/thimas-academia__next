@@ -1,14 +1,16 @@
 import {
   Barbell,
   ChatCircle,
-  Gear,
   House,
-  SquaresFour,
   User,
 } from "@phosphor-icons/react/dist/ssr";
 import { AsideLink } from "./aside-link";
 import "./aside.css";
 import { Logo } from "../navigate/logo";
+import { cookies } from "next/headers";
+import jwt from "jsonwebtoken";
+import { IGetToken } from "@/types/auth";
+import { Logout } from "../navigate/logout";
 
 const asideLinks = {
   admin: [
@@ -32,15 +34,25 @@ const asideLinks = {
       href: "/admin/contato",
       icon: <ChatCircle size={20} />,
     },
+  ],
+  aluno: [
     {
-      label: "Modalidades",
-      href: "/admin/modalidades",
-      icon: <SquaresFour size={20} />,
+      label: "Página Inicial",
+      href: "/aluno",
+      icon: <House size={20} />,
     },
   ],
 };
 
-export function Aside() {
+const userRoutes = async () => {
+  const token = cookies().get("thimas-academia-auth")?.value;
+  const decode = jwt.decode(token!);
+  return decode as IGetToken;
+};
+
+export async function Aside() {
+  const data = await userRoutes();
+
   return (
     <aside className="w-[250px] min-w-[250px] h-full border-r border-r-[#e9e9e9]">
       <div className="w-full h-screen grid-in p-7">
@@ -53,17 +65,31 @@ export function Aside() {
             Informações Gerais
           </p>
 
-          {asideLinks.admin.map(({ href, icon, label }, index) => {
-            return (
-              <AsideLink key={index} href={href} icon={icon} label={label} />
-            );
-          })}
+          {data.isAdmin
+            ? asideLinks.admin.map(({ href, icon, label }, index) => {
+                return (
+                  <AsideLink
+                    key={index}
+                    href={href}
+                    icon={icon}
+                    label={label}
+                  />
+                );
+              })
+            : asideLinks.aluno.map(({ href, icon, label }, index) => {
+                return (
+                  <AsideLink
+                    key={index}
+                    href={href}
+                    icon={icon}
+                    label={label}
+                  />
+                );
+              })}
+        </div>
 
-          <p className="text-[13px] font-medium text-gray-500 mt-3 mb-3">
-            Configurações
-          </p>
-
-          <AsideLink noLink icon={<Gear size={20} />} label="Configurações" />
+        <div className="flex items-end justify-end border-t">
+          <Logout />
         </div>
       </div>
     </aside>

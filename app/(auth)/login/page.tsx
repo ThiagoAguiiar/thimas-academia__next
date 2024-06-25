@@ -137,13 +137,6 @@ export default function Page() {
 
           <Google />
 
-          <Link
-            className="block text-[14px] underline text-blue-600"
-            href="/register"
-          >
-            Criar uma conta
-          </Link>
-
           {error && <p className="text-red-500 text-sm">{error}</p>}
         </div>
       </form>

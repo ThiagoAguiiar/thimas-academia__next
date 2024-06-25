@@ -4,6 +4,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { createUser, getUserByEmail } from "../../user/methods";
 import { IPostUser } from "@/types/user";
 
+import jwt from "jsonwebtoken";
+
 export async function GET(req: NextRequest) {
   const requestUrl = new URL(req.url);
   const code = requestUrl.searchParams.get("code");
@@ -20,7 +22,13 @@ export async function GET(req: NextRequest) {
   if (session) {
     const userDb = await getUserByEmail(session.user.user_metadata.email);
 
-    cookies().set("sb-admin", "false", {
+    const jwtData = jwt.sign(
+      { email: session.user.email, isAdmin: false },
+      process.env.NEXT_PUBLIC_JWT_SECRET!
+    );
+
+    // Cookie de autenticação
+    cookies().set("thimas-academia-auth", jwtData, {
       httpOnly: true,
       path: "/",
       sameSite: "strict",
