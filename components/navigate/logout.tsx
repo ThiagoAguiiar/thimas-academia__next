@@ -14,6 +14,7 @@ export function Logout() {
     try {
       const response = await fetch(`${location.origin}/api/auth/logout`);
       const json = await response.json();
+
       if (json.status === 200) router.push("/login");
     } catch (err) {
       console.log(err);

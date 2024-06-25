@@ -7,9 +7,12 @@ import { redirect } from "next/navigation";
 
 // Verifica se tem token
 const protectRoute = async () => {
-  const auth = cookies().get("thimas-academia-auth")?.value;
+  const cookieStore = cookies();
+  const auth = cookieStore.get("thimas-academia-auth")?.value;
 
-  return jwt.decode(auth!);
+  if (!auth) return null;
+
+  return jwt.decode(auth);
 };
 
 export default async function Layout({ children }: IChildren) {

@@ -1,11 +1,10 @@
 import { cookies } from "next/headers";
-import { NextRequest } from "next/server";
 import { handleResponse } from "../../utils/handleError";
 
 export async function GET() {
   try {
     cookies().delete("thimas-academia-auth");
-    
+
     return handleResponse(
       null,
       null,

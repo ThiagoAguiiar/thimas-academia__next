@@ -1,3 +1,5 @@
+"use client";
+
 import "../planos.css";
 
 import { Button } from "@/components/ui/button";
@@ -27,6 +29,13 @@ export function CardPlanos({
   title,
   color,
 }: ICardPlanosProps) {
+  const handleClick = () => {
+    const a = document.createElement("a");
+    a.href = "https://api.whatsapp.com/send?phone=19991723702";
+    a.target = "_blank";
+    a.click();
+  };
+
   return (
     <div className="min-w-[350px] min-h-[320px] bg-white rounded-3xl space-y-4 shadow-lg card-pl">
       <div className="flex justify-end">
@@ -81,6 +90,7 @@ export function CardPlanos({
           <div>
             <Button
               className={`rounded-full w-full justify-center`}
+              onClick={handleClick}
               style={{ background: color }}
             >
               Quero esse

@@ -33,7 +33,7 @@ export function Google() {
     <Button
       type="button"
       loading={loading}
-      className="justify-center gap-x-2 text-[15px] gap-x-2 border w-full  bg-white text-black hover:bg-[#f8fafc] border-[#c7c7c7]"
+      className="justify-center text-[15px] gap-x-2 border w-full  bg-white text-black hover:bg-[#f8fafc] border-[#c7c7c7]"
       onClick={handleClick}
     >
       <GoogleLogo />

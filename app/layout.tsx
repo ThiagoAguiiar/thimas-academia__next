@@ -1,4 +1,6 @@
 import { IChildren } from "@/types/children";
+import { CookiesProvider } from "next-client-cookies/server";
+
 import "./globals.css";
 import "swiper/css";
 
@@ -23,15 +25,17 @@ export default function RootLayout({ children }: Readonly<IChildren>) {
   return (
     <html lang="pt-br">
       <body className={inter.className}>
-        <StateCityProvider>
-          <SlideOverProvider>
-            <NextTopLoader color="#ff1e00" showSpinner={false} height={3} />
-            <Navbar />
-            {children}
-            <Toaster />
-            <Footer />
-          </SlideOverProvider>
-        </StateCityProvider>
+        <CookiesProvider>
+          <StateCityProvider>
+            <SlideOverProvider>
+              <NextTopLoader color="#ff1e00" showSpinner={false} height={3} />
+              <Navbar />
+              {children}
+              <Toaster />
+              <Footer />
+            </SlideOverProvider>
+          </StateCityProvider>
+        </CookiesProvider>
       </body>
     </html>
   );

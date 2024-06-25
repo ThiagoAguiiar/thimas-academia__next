@@ -5,6 +5,7 @@ import { createUser, getUserByEmail } from "../../user/methods";
 import { IPostUser } from "@/types/user";
 
 import jwt from "jsonwebtoken";
+import { hashPassword } from "@/lib/password";
 
 export async function GET(req: NextRequest) {
   const requestUrl = new URL(req.url);
@@ -14,6 +15,8 @@ export async function GET(req: NextRequest) {
     const supabase = supabaseRouteHandler(cookies);
     await supabase.auth.exchangeCodeForSession(code);
   }
+
+  console.log(await hashPassword("123"));
 
   // Cadastrar o usuário no banco (via google auth)
   const session = (await supabaseRouteHandler(cookies).auth.getSession()).data
@@ -28,11 +31,7 @@ export async function GET(req: NextRequest) {
     );
 
     // Cookie de autenticação
-    cookies().set("thimas-academia-auth", jwtData, {
-      httpOnly: true,
-      path: "/",
-      sameSite: "strict",
-    });
+    cookies().set("thimas-academia-auth", jwtData);
 
     if (userDb.data && userDb.data.length === 0) {
       const user: IPostUser = {
@@ -45,11 +44,9 @@ export async function GET(req: NextRequest) {
         password: "",
       };
 
-      const res = await createUser(user);
+      await createUser(user);
 
-      if (res.error === null) {
-        return NextResponse.redirect(`${requestUrl.origin}/aluno`);
-      }
+      return NextResponse.redirect(`${requestUrl.origin}/aluno`);
     }
 
     return NextResponse.redirect(`${requestUrl.origin}/aluno`);

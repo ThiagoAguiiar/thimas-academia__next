@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Barbell,
   ChatCircle,
@@ -7,10 +9,11 @@ import {
 import { AsideLink } from "./aside-link";
 import "./aside.css";
 import { Logo } from "../navigate/logo";
-import { cookies } from "next/headers";
+import { Logout } from "../navigate/logout";
+import { useCookies } from "next-client-cookies";
+
 import jwt from "jsonwebtoken";
 import { IGetToken } from "@/types/auth";
-import { Logout } from "../navigate/logout";
 
 const asideLinks = {
   admin: [
@@ -44,14 +47,14 @@ const asideLinks = {
   ],
 };
 
-const userRoutes = async () => {
-  const token = cookies().get("thimas-academia-auth")?.value;
-  const decode = jwt.decode(token!);
-  return decode as IGetToken;
-};
+export function Aside() {
+  const cookies = useCookies();
 
-export async function Aside() {
-  const data = await userRoutes();
+  const data = cookies.get("thimas-academia-auth");
+
+  const x = jwt.decode(data!) as IGetToken;
+
+  console.log(x);
 
   return (
     <aside className="w-[250px] min-w-[250px] h-full border-r border-r-[#e9e9e9]">
@@ -65,7 +68,7 @@ export async function Aside() {
             Informações Gerais
           </p>
 
-          {data.isAdmin
+          {x.isAdmin
             ? asideLinks.admin.map(({ href, icon, label }, index) => {
                 return (
                   <AsideLink
